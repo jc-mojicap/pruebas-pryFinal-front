@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Imprimir rotulo" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window id="windowImprimirRotulos" 
+    	title="${c:l('correspondencia.title.radicacion.imprimirRotulo')}" border="normal" closable="true" height="160px" width="290px"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.correspondencia.ImprimirRotulosController')" 
+        onClose="@command('cerrarVentana', arg1=event)">
+		
+		<style src="/css/estilo.css" />
+        
+        <listbox hflex="1" vflex="1" nonselectableTags="*">
+            <listhead>
+                <listheader hflex="min" />
+                <listheader hflex="max" />
+            </listhead>
+            <listitem>
+                <listcell label="${c:l('correspondencia.commons.label.radicado')}" />
+                <listcell>
+                    <label id="lblRadicado" />
+                </listcell>
+            </listitem>
+            <listitem>
+                <listcell label="${c:l('correspondencia.label.radicacion.cantidadCopias')}" />
+                <listcell>
+                    <spinner id="spinCantidad" value="1" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}, min 1 max 99" maxlength="2" sclass="obligatorio"/>
+                </listcell>
+            </listitem>
+            <listitem style="text-align:center;">
+                <listcell span="2" style="backgound:red !important">
+                    <button id="btnImprimir" label="${c:l('commons.button.imprimir')}" onClick="@command('imprimirReporte')" autodisable="self" />
+                    <space />
+	            	<button label="${c:l('commons.button.cerrar')}" onClick="@command('cerrarVentana', arg1=event)"/>
+                </listcell>
+            </listitem>
+        </listbox>
+    </window>
+</zk>

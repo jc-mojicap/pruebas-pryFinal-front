@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Gestión Documental" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window border="none" position="center"
+    	apply="co.com.grupoasd.documental.presentacion.controller.comun.DownloadController"
+    	hflex="1" vflex="1">
+    	<script>
+    		$(document).ready(function() { $('body').click(function(){
+    		self.close(); });
+
+    		window.setTimeout(window.close, 60000); });
+    	</script>
+    	<button id="btnCerrar"
+    		label="${c:l('commons.button.cerrarVentana')}" />
+    </window>
+</zk>

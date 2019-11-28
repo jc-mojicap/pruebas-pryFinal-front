@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Configurar Tabla Retención Documental" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="windowsConfigTablaRet"
+		title="${c:l('retencion.config.titulo')}"
+		apply="co.com.grupoasd.documental.presentacion.controller.trd.ConfigTablaRetController"
+		border="normal" closable="true" sizable="true" maximizable="true"
+		maximized="true" height="85%" width="150%"
+		style="overflow:auto;">
+
+		<style src="/css/estilo.css" />
+		<script type="text/javascript" src="/js/js_control.js"></script>
+
+		<vlayout hflex="1" vflex="1" style="overflow: auto;">
+			<borderlayout style="min-height: 800px;">
+				<north vflex="min" border="none" style="padding:5px; text-align:center;"> 
+					<label style="font-weight:bold; font-size:20px;" value="Configurar Tabla de Retención Documental" />
+				</north>
+				<center autoscroll="true" border="none" style="padding:5px">
+					<vlayout vflex="1" hflex="1">
+						
+						<hlayout style="text-align:right">
+							<button label="Adm Opc Adicionales de Disposición Final" width="200px" style="white-space: normal;"></button>
+						</hlayout>
+						
+						<tree id="treeTrd" height="600px">
+							<auxhead id="auxHeadPrincipal" hflex="min">
+								<auxheader label="${c:l('retencion.config.label.areaSerieSubserieTipoDocum')}" align="center" style="white-space: normal;"></auxheader>
+								<auxheader label="${c:l('retencion.config.label.retencion')}" colspan="2" align="center"></auxheader>
+								<auxheader label="${c:l('retencion.config.label.disposicionFinal')}" colspan="3" align="center"></auxheader>
+								<auxheader id="auxheaderOpcDispFinal" label="${c:l('retencion.config.label.opcAdcDispFinal')}" align="center" style="white-space: normal;"></auxheader>
+								<auxheader label="${c:l('retencion.config.label.procedimiento')}" align="center"></auxheader>
+								<auxheader label="${c:l('retencion.config.label.opciones')}" align="center"></auxheader>
+							</auxhead>
+						
+							<treecols id="treecols" hflex="1">
+							</treecols>
+							
+							<treefoot>
+							 	<treefooter span="10">
+							 		<hlayout style="text-align:center; padding-left:5px; padding-right:5px;" >
+	                                    <button id="btnGenerarTrd" label="Generar TRD" />
+	                                    <button id="btnGuardarParcial" label="Guardar Parcial" />
+	                                    <button id="btnCancelar" label="Cancelar" />
+			                        </hlayout>
+							 	</treefooter>
+							</treefoot>
+						</tree>
+					</vlayout>
+
+				</center>
+			</borderlayout>
+		</vlayout>
+		<popup id="popupLabel" width="300px">
+		</popup>
+	</window>
+</zk>

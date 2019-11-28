@@ -1,0 +1,43 @@
+<?meta http-equiv="X-UA-Compatible" content="chrome=1"?>
+<?page title="Gestión Documental" contentType="text/html;charset=UTF-8"?>
+<?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+    <window id="IndexWindow" title="${c:l('ventana_menu')}" border="normal"
+            width="100%" height="100%" position="center" mode="embedded"
+            apply="co.com.grupoasd.documental.cliente.menu.IndexController" style="max-height:100%;max-width:100%;padding:0px 0px 0px 0px;">
+        <style>
+            body{
+            max-height:100%;max-width:100%;
+            }
+            /* ------------------- TOOLBAR -------------------- */
+            /* remove white strips between the toolbars */
+            .hboxRemoveWhiteStrips td.z-hbox-sep {
+            width: 0;
+            padding: 0;
+            }
+            
+            .z-messagebox { 
+            word-break: normal; 
+            }
+        </style>
+        <borderlayout>
+            <north>
+                <menubar id="menubar" width="100%">
+                </menubar>
+            </north>
+            <center>
+                <div id="mainContainer" height="100%" width="100%">
+                <image id="imageFondo" style="position: absolute; bottom: 10px; right: 10px;"/>
+<!-- TODO: Imagen de fondo <image height="100%" width="100%" src="/resources/nimbus_background.jpg" /> -->
+<!-- TODO: Logo empresa <image src="/resources/logo.jpg" style="position: absolute; bottom: 10px; right: 10px;"/> -->
+                </div>
+            </center>
+            <south>
+                <vlayout hflex="1" style="text-align: right;">
+                    <label id="lblUsuActual" style="text-align:right;padding-right:4px;" hflex="1" height="17px"/>
+                </vlayout>
+            </south>
+        </borderlayout>
+    </window>
+</zk>

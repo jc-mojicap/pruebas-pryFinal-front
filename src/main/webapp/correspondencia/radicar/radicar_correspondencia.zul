@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Radicar correspondencia" contentType="text/html;charset=UTF-8"?>
+<?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?>
+<zk>
+    <window id="windowRadicar"
+        title="${c:l('correspondencia.title.radicarCorrespondencia')}"        
+        viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.correspondencia.RadicacionController')"
+        border="normal" closable="true" sizable="true" maximizable="true"
+        maximized="true" height="85%" width="90%"
+        style="min-width:860px; min-height:800px"
+        onClose="@command('cerrarVentana', arg1=event)">
+        
+        <style src="/css/estilo.css" />
+        
+        <vlayout hflex="1" vflex="1">
+            <borderlayout hflex="1" vflex="1" >
+                <west border="none" size="40%">
+                    <borderlayout hflex="1" vflex="min">
+<!-- DATOS RADICADO -->
+                        <north border="none" vflex="min"
+                            style="padding:5px">
+                            <groupbox mold="3d" closable="false">
+                                <caption label="${c:l('correspondencia.title.radicacion.datosRadicado')}" />
+                                <listbox nonselectableTags="*">
+                                    <listhead>
+                                        <listheader hflex="min" />
+                                        <listheader hflex="max" />
+                                    </listhead>
+                                    <listitem>
+                                        <listcell
+                                            label="${c:l('correspondencia.commons.label.tipoRadicacion')}" style="padding-left:10px;" />
+                                        <listcell>
+                                            <combobox id="cmbTipoRadicacion" model="@load(vm.tipoCorrespondencia)" sclass="obligatorio" selectedItem="@bind(vm.tipoCorrespondenciaSeleccionada)" 
+                                            onSelect="@command('cargarInformacionTipoRadicacion')" instant="true" width="80%" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}" readonly="true"
+                                            placeholder="${c:l('commons.label.seleccione')}">
+                                                <template name="model">
+                                                    <comboitem value="@load(each.id)" label="@load(each.nombre)"/>
+                                                </template>
+                                            </combobox>
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell
+                                            label="${c:l('commons.label.areaProceso')}" style="padding-left:10px;" />
+                                        <listcell>
+                                            <combobox
+                                                id="cmbAreaProceso" model="@load(vm.areas)" selectedItem="@bind(vm.areaSeleccionada)" width="80%" sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}"
+                                                onChange="@command('cargarInformacionSerie')" placeholder="${c:l('commons.label.seleccione')}" readonly="true">
+                                                <template name="model">
+                                                    <comboitem value="@load(each)" label="@load(each.nombre)"/>
+                                                </template> 
+                                            </combobox>
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('commons.label.serie')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <combobox id="cmbSerie" model="@load(vm.series)" selectedItem="@bind(vm.serieSeleccionada)" sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}"
+                                                width="80%" onChange="@command('cargarInformacionSubserie')" placeholder="${c:l('commons.label.seleccione')}" readonly="true">
+                                                <template name="model">
+                                                    <comboitem value="@load(each)" label="@load(each.nombre)" />
+                                                </template> 
+                                            </combobox>
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('commons.label.subserie')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <combobox id="cmbSubserie" model="@load(vm.subseries)" selectedItem="@bind(vm.subserieSeleccionada)" 
+                                            sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}" width="80%" placeholder="${c:l('commons.label.seleccione')}" readonly="true">
+                                                <template name="model">
+                                                    <comboitem value="@load(each)" label="@load(each.nombre)" />
+                                                </template>     
+                                            </combobox>
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('correspondencia.label.radicacion.secuencia')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <label id="lblSecuencia" />
+                                            <space width="50%" />
+                                            <checkbox id="checkAnexo" label="${c:l('commons.label.anexos')}" left="70px" />
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('correspondencia.commons.label.radicado')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <label id="lblRadicado" />
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('correspondencia.label.radicacion.fechaSistema')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <label id="lblFechaSistema" />
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('correspondencia.label.radicacion.cantidadFolios')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <spinner id="spinCantFolios" sclass="obligatorio"
+                                                value="1" style="max-width:100%" maxlength="5"
+                                                constraint="no empty:${c:l('commons.tooltip.campoRequerido')}, min 1 max 99999" width="40%" />
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('commons.label.canalRecepcion')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <vlayout hflex="1">
+                                                <combobox id="cmbCanal" model="@load(vm.corCanal)" selectedItem="@bind(vm.canalRecepcionCorrespondenciaSeleccionado)" sclass="obligatorio"
+                                                    constraint="no empty:${c:l('commons.tooltip.campoRequerido')}" width="80%" onChange="@command('verificarCanalRecepcion')" instant="true" readonly="true"
+                                                    placeholder="${c:l('commons.label.seleccione')}" >
+                                                    <template name="model">
+                                                        <comboitem value="@load(each.canalId)" label="@load(each.nombre)"/>                                                 
+                                                    </template>
+                                                </combobox>
+                                                <button
+                                                    id="btnCorreoCertificado" label="${c:l('correspondencia.button.correoCertificado')}"
+                                                    disabled="true" onClick='popCorreoCert.open(self,"after_start")'/>
+                    <!-- CORREO CERTIFICADO -->
+                                                <popup
+                                                    id="popCorreoCert" width="350px">
+                                                    <groupbox mold="3d"
+                                                        closable="false">
+                                                        <caption
+                                                            label="${c:l('correspondencia.title.radicacion.correoCertificado')}">
+                                                        </caption>
+                                                        <listbox
+                                                            nonselectableTags="*">
+                                                            <listhead>
+                                                                <listheader
+                                                                    hflex="min" />
+                                                                <listheader
+                                                                    hflex="max" />
+                                                            </listhead>
+                                                            <listitem>
+                                                                <listcell
+                                                                    label="${c:l('correspondencia.label.radicacion.guia')}" />
+                                                                <listcell>
+                                                                    <textbox
+                                                                        id="txtGuia" maxlength="20" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}" sclass="obligatorio"/>
+                                                                </listcell>
+                                                            </listitem>
+                                                            <listitem>
+                                                                <listcell
+                                                                    label="${c:l('correspondencia.label.radicacion.courier')}" />
+                                                                <listcell>
+                                                                    <combobox id="cmbCourier" model="@load(vm.transportadoras)" selectedItem="@bind(vm.transportadoraSeleccionada)" sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}" 
+                                                                    placeholder="${c:l('commons.label.seleccione')}" readonly="true" >
+                                                                        <template name="model">
+                                                                            <comboitem value="@load(each)" label="@load(each.nombre)"/>
+                                                                        </template>
+                                                                    </combobox>
+                                                                </listcell>
+                                                            </listitem>
+                                                            <listitem>
+                                                                <listcell
+                                                                    label="${c:l('commons.label.fecha')}" />
+                                                                <listcell>
+                                                                    <datebox
+                                                                        id="dtxFecha" constraint="no future, no empty:${c:l('commons.tooltip.campoRequerido')}" sclass="obligatorio" onCreate="self.setValue(new Date())" format="${c:l('commons.config.dateFormat')}"/>
+                                                                </listcell>
+                                                            </listitem>
+                                                            <listitem>
+                                                                <listcell
+                                                                    label="${c:l('correspondencia.label.radicacion.tipoEmbalaje')}" />
+                                                                <listcell>
+                                                                    <combobox id="cmbTipoEmbalaje" model="@load(vm.tipoEmbalajes)" selectedItem="@bind(vm.tipoEmbalajeSeleccionado)" sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}"
+                                                                    placeholder="${c:l('commons.label.seleccione')}" readonly="true" >
+                                                                        <template name="model">
+                                                                            <comboitem value="@load(each)" label="@load(each.nombre)" />
+                                                                        </template>
+                                                                    </combobox>
+                                                                </listcell>
+                                                            </listitem>
+                                                            <listitem>
+                                                                <listcell
+                                                                    label="${c:l('correspondencia.label.radicacion.cantidadEmbalaje')}" />
+                                                                <listcell>
+                                                                    <spinner
+                                                                        id="spinCantEmbalaje" value="1"
+                                                                        constraint="no empty:${c:l('commons.tooltip.campoRequerido')}, min 1 max 999" maxlength="3" sclass="obligatorio"/>
+                                                                </listcell>
+                                                            </listitem>
+                                                            <listfoot>
+                                                                <listfooter
+                                                                    span="2">
+                                                                    <hlayout
+                                                                        spacing="10px"
+                                                                        style="margin:auto;text-aling:center;padding:5px;">
+                                                                        <button
+                                                                            id="btnAceptarCourrier" label="${c:l('commons.button.aceptar')}" onClick="popCorreoCert.close()" />
+                                                                    </hlayout>
+                                                                </listfooter>
+                                                            </listfoot>
+                                                        </listbox>
+                                                    </groupbox>
+                                                </popup>
+                    <!-- FIN CORREO CERTIFICADO -->
+                                            </vlayout>
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('commons.label.asunto')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <textbox id="txtAsunto" sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}"
+                                                maxlength="255" width="80%" rows="2"
+                                                style="max-height:37px; max-width: 80%" />
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell label="${c:l('commons.label.comentarios')}"
+                                            style="padding-left:10px" />
+                                        <listcell>
+                                            <textbox id="txtComentario" sclass="obligatorio" constraint="no empty:${c:l('commons.tooltip.campoRequerido')}"
+                                                rows="2" maxlength="1000" width="80%"
+                                                style="max-height:37px; max-width: 80%" />
+                                        </listcell>
+                                    </listitem>
+                                    <listitem>
+                                        <listcell
+                                            label="${c:l('correspondencia.commons.label.radicadoAsociado')}" style="padding-left:10px" />
+                                        <listcell>
+                                            <textbox
+                                                id="txtRadicadoAsociado" maxlength="14" width="80%" disabled="true"/>
+                                        </listcell>
+                                    </listitem>
+                                </listbox>
+                            </groupbox>
+                        </north>
+<!-- ROTULO -->
+                        <center border="none" vflex="min"
+                            style="padding:5px">
+                            <groupbox mold="3d" closable="false"
+                                hflex="1" vflex="1" style="min-height:100px">
+                                <caption label="${c:l('correspondencia.title.radicacion.rotulo')}" />
+                                <hlayout spacing="10px"
+                                    style="padding:10px; max-width:100%; max-height:100%" hflex="1"
+                                    vflex="1">
+                                    <hbox id="hboxImage"
+                                        style="border:1px solid #cfcfcf; max-width:100%; max-height:100%"
+                                        hflex="1" vflex="1">
+                                        <image id="imgRotulo" 
+                                            style="max-width:100%; max-height:100px">
+                                        </image>
+                                    </hbox>
+                                    <button id="btnVistaPrevia" label="${c:l('commons.button.vistaPrevia')}" 
+                                       onClick="@command('mostrarVistaPreviaRotulo')" autodisable="self" />
+                                </hlayout>
+                            </groupbox>
+                        </center>
+                    </borderlayout>
+                </west>
+                <center id="center" border="none">
+                    <borderlayout>
+<!-- DATOS REMITENTE -->
+                        <north border="none" vflex="min"
+                            style="padding:5px">
+                            <hlayout>
+                    <!-- ENTRADA -->
+                                <groupbox id="grbRemTercero" mold="3d"
+                                    closable="false">
+                                    <caption label="${c:l('correspondencia.title.radicacion.datosRemitente')}" />
+                                    <listbox nonselectableTags="*">
+                                        <listhead>
+                                            <listheader hflex="min" />
+                                            <listheader hflex="max" />
+                                        </listhead>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.nombreTercero')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <combobox
+                                                    id="cmbTercero" model="@load(vm.terceros)" selectedItem="@bind(vm.terceroSeleccionado)" buttonVisible="false" sclass="obligatorio"
+                                                    width="90%" onChanging="@command('actualizarTercerosPorNombre', arg1=event)" onSelect="@command('cargarInformacionTercero')" autocomplete="false">
+                                                    <template name="model">
+                                                        <comboitem value="@load(each)" label="@load(each.nombre)" />
+                                                    </template>
+                                                </combobox>
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.numeroIdentificacion')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <combobox
+                                                    id="cmbNroIdentificacion" model="@load(vm.terceros)" selectedItem="@bind(vm.terceroSeleccionado)" buttonVisible="false" sclass="obligatorio"
+                                                    onChanging="@command('actualizarTercerosPorNumero', arg1=event)" onSelect="@command('cargarInformacionTercero')" autocomplete="false" width="90%" >
+                                                    <template name="model">
+                                                        <comboitem value="@load(each)" label="@load(each.numero)" />
+                                                    </template>
+                                                </combobox>
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.nombreFuncionario')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <textbox
+                                                    id="txtNombreFuncionario" width="90%" maxlength="255" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.idFuncionario')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <textbox
+                                                    id="txtIdFuncionario" width="90%" maxlength="20" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.commons.label.radicadoRemitente')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <textbox
+                                                    id="txtRadRemitente" width="90%" maxlength="50" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell label="${c:l('commons.label.direccion')}"
+                                                style="padding-left:10px" />
+                                            <listcell>
+                                                <label id="lblDireccion"
+                                                    hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell label="${c:l('commons.label.ciudad')}"
+                                                style="padding-left:10px" />
+                                            <listcell>
+                                                <label id="lblCiudad"
+                                                    hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.responsable')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <label
+                                                    id="lblResponsable" hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell label="${c:l('correspondencia.label.radicacion.cargo')}"
+                                                style="padding-left:10px" />
+                                            <listcell>
+                                                <label
+                                                    id="lblCargoTercero" hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.dependencia')}" style="padding-left:10px" />
+                                            <listcell>
+                                                <label
+                                                    id="lblDependencia" hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                        <listfoot>
+                                            <listfooter span="2">
+                                                <hlayout
+                                                    style="float:right;">
+                                                    <button
+                                                    id="btnAdminTerceros" label="${c:l('correspondencia.button.administrarTerceros')}" autodisable="self" onClick="@command('administrarTerceros')" visible="@load(vm.administrarTerceros)" />
+                                                </hlayout>
+                                            </listfooter>
+                                        </listfoot>
+                                    </listbox>
+                                </groupbox>
+                    <!-- FIN ENTRADA -->
+                    <!-- SALIDA / INTERNA -->
+                                <groupbox id="grbRemInterno" mold="3d"
+                                    closable="false" visible="false">
+                                    <caption label="${c:l('correspondencia.title.radicacion.datosRemitente')}" />
+                                    <listbox nonselectableTags="*">
+                                        <listhead>
+                                            <listheader hflex="min" />
+                                            <listheader hflex="max" />
+                                        </listhead>
+                                        <listitem>
+                                            <listcell
+                                                label="${c:l('correspondencia.label.radicacion.usuario')}" />
+                                            <listcell>
+                                                <combobox
+                                                    id="cmbUsuario" model="@load(vm.usuarios)" selectedItem="@bind(vm.usuarioSeleccionado)" autocomplete="false" sclass="obligatorio"
+                                                    onChanging="@command('actualizarUsuariosPorNombresYApellidos', arg1=event)" onSelect="@command('cargarInformacionUsuario')" buttonVisible="false" width="90%">
+                                                    <template name="model">
+                                                        <comboitem value="@load(each)" label="@load(each.primerNombre.concat(' ').concat(each.segundoNombre).concat(' ').concat(each.primerApellido).concat(' ').concat(each.segundoApellido))" />
+                                                    </template>
+                                                </combobox>
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell label="${c:l('correspondencia.label.radicacion.cargo')}" />
+                                            <listcell>
+                                                <label
+                                                    id="lblCargoUsuario" hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                        <listitem>
+                                            <listcell label="${c:l('commons.label.areaProceso')}" />
+                                            <listcell>
+                                                <label id="lblAreaProcesoRemitente"
+                                                    hflex="1" />
+                                            </listcell>
+                                        </listitem>
+                                    </listbox>
+                                </groupbox>
+                    <!-- FIN SALIDA / INTERNA -->
+                            </hlayout>
+                        </north>
+<!-- DATOS DESTINATARIOS -->
+                        <center border="none" vflex="min"
+                            style="padding:5px">
+                            <hlayout hflex="1" vflex="1">
+                    <!-- ENTRADA / INTERNO -->
+                                <groupbox id="grbDestInterno" mold="3d"
+                                    closable="false" hflex="1" vflex="1"
+                                    style="min-height:100px">
+                                    <caption
+                                        label="${c:l('correspondencia.title.radicacion.datosDestinatario')}" />
+                                    <listbox id="lstDestInternos" model="@load(vm.usuariosDestinatario)" selectedItem="@bind(vm.usuarioDestinatarioSeleccionado)"
+                                        checkmark="true" multiple="false" hflex="1" vflex="1" onSelect="@command('limpiarErrorDestinatario')" >
+                                        <listhead>
+                                            <listheader
+                                                label="${c:l('correspondencia.label.radicacion.principal')}" align="center" width="65px" />
+                                            <listheader
+                                                label="${c:l('correspondencia.label.radicacion.usuario')}" align="center" hflex="max" />
+                                            <listheader 
+                                                label="${c:l('correspondencia.label.radicacion.cargo')}" align="center" hflex="max" />
+                                            <listheader
+                                                label="${c:l('commons.label.areaProceso')}" align="center" hflex="min" />
+                                            <listheader
+                                                label="${c:l('commons.label.opciones')}" align="center" width="65px" />
+                                        </listhead>
+                                        <template name="model">
+                                            <listitem>
+                                                <listcell label="" />
+                                                <listcell label="@load(each.nombreCompleto)" style="text-align: justify"/>
+                                                <listcell label="@load(each.nombreRol)" style="text-align: justify" />
+                                                <listcell label="@load(each.nombreArea)" style="text-align: justify"/>
+                                                <listcell label="" >
+                                                    <toolbarbutton image="/recursos/icons/delete.png" onClick="@command('eliminarUsuarioDestino', usuario=each)"/>
+                                                </listcell>
+                                            </listitem>
+                                        </template>
+                                        <listfoot>
+                                            <listfooter span="5">
+                                                <hlayout
+                                                    style="float:right;">
+                                                    <button
+                                                        id="btnAgregarDestUsuario" label="${c:l('correspondencia.button.agregarDestinatarios')}" 
+                                                        onClick="@command('agregarDestinatarioUsuario')" autodisable="self" />
+                                                </hlayout>
+                                            </listfooter>
+                                        </listfoot>
+                                    </listbox>
+                                </groupbox>
+                    <!-- FIN ENTRADA / INTERNO -->
+                    <!-- SALIDA -->
+                                <groupbox id="grbDestTercero" mold="3d"
+                                    closable="false" visible="false" hflex="1" vflex="1"
+                                    style="min-height:100px">
+                                    <caption
+                                        label="${c:l('correspondencia.title.radicacion.datosDestinatario')}" />
+                                    <listbox id="lstDestTerceros" model="@load(vm.tercerosDestinatario)" selectedItem="@bind(vm.terceroDestinatarioSeleccionado)"
+                                        checkmark="true" multiple="false" hflex="1" vflex="1" onSelect="@command('limpiarErrorDestinatario')" >
+                                        <listhead>
+                                            <listheader
+                                                label="${c:l('correspondencia.label.radicacion.principal')}" align="center" width="65px" />
+                                            <listheader
+                                                label="${c:l('correspondencia.label.radicacion.nombreTercero')}" align="center" hflex="max" />
+                                            <listheader
+                                                label="${c:l('correspondencia.label.radicacion.responsable')}" align="center" hflex="max" />
+                                            <listheader
+                                                label="${c:l('commons.label.direccion')}" align="center" hflex="min" />
+                                            <listheader 
+                                                label="${c:l('commons.label.ciudad')}" align="center" hflex="min" />
+                                            <listheader
+                                                label="${c:l('commons.label.opciones')}" align="center" width="65px" />
+                                        </listhead>
+                                        <template name="model">
+                                            <listitem>
+                                                <listcell label="" />
+                                                <listcell label="@load(each.nombre)" style="text-align: justify"/>
+                                                <listcell label="@load(each.responsable)" style="text-align: justify" />
+                                                <listcell label="@load(each.direccion)" style="text-align: justify"/>
+                                                <listcell label="@load(each.nombreMunicipio.concat(' (').concat(each.nombreDepartamento).concat(')'))" style="text-align: justify"/>
+                                                <listcell label="" >
+                                                    <toolbarbutton image="/recursos/icons/delete.png" onClick="@command('eliminarTerceroDestino', tercero=each)"/>
+                                                </listcell>
+                                            </listitem>
+                                        </template>
+                                        <listfoot>
+                                            <listfooter span="6">
+                                                <hlayout hflex="1">
+                                                    <button
+                                                        id="btnAdministrarTercerosDest" label="${c:l('correspondencia.button.administrarTerceros')}"
+                                                        style="float:left;" autodisable="self" onClick="@command('administrarTerceros')" visible="@load(vm.administrarTerceros)" />
+                                                    <button
+                                                        id="btnAgregarDestTercero" label="${c:l('correspondencia.button.agregarDestinatarios')}"
+                                                        style="float:right;" onClick="@command('agregarDestinatarioTercero')" autodisable="self"/>
+                                                </hlayout>
+                                            </listfooter>
+                                        </listfoot>
+                                    </listbox>
+                                </groupbox>
+                    <!-- FIN SALIDA -->
+                            </hlayout>
+                        </center>
+                        <south border="none" style="padding:5px">
+                            <hlayout spacing="5px"
+                                style="text-align:right;padding:5px;">
+                                <button id="btnRadicar" label="${c:l('correspondencia.button.radicar')}"
+                                    style="float:right;" onClick="@command('radicarCorrespondencia')" autodisable="self" />
+                                <button id="btnCancelar"
+                                    label="${c:l('commons.button.cancelar')}" style="float:right;" onClick="@command('cerrarVentana', arg1=event)"/>
+                            </hlayout>
+                        </south>
+                    </borderlayout>
+                </center>
+            </borderlayout>
+        </vlayout>
+    </window>
+</zk>

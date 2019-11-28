@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Agregar Documento" contentType="text/html;charset=UTF-8"?>
+<!-- <?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?>  -->
+<zk>
+    <window id="windowAgregarDocumento" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.trd.AgregarDocumentoController')"
+    position="center" mode="overlapped" border="normal" title="${c:l('correspondencia.title.agregarTerceros')}"
+    closable="true" sizable="true" maximizable="true"
+    height="500px" width="1000px" style="min-height:500px">
+    
+        <style src="/css/estilo.css" />
+    
+        <vlayout hflex="1" vflex="1" >
+        <hlayout spacing="10px" style="margin:auto; text-align:center; padding:10px">
+                <label style="font-weight:bold; font-size:20px;" value="Documentos" />
+        </hlayout>
+        <hlayout spacing="10px"
+        	style="margin:auto; text-align:center; padding:10px">
+        	<label	value="${c:l('trd.agregarDocumento.busquedaDocumentos')}" />
+        	<textbox id="txtBusqueda" width="400px" onOK="@command('buscarDocumentoXTextbox')" />
+        	<button label="${c:l('commons.button.buscar')}" id="btnBuscarDocumento" onClick="@command('buscarDocumentoXButton')"  />
+        </hlayout>
+        <borderlayout hflex="1" vflex="1">
+        	<center  autoscroll="true"   style="padding:5px">
+				<vlayout hflex="1" vflex="1">
+					<label style="font-size:12px; padding:5px;" value="Seleccione los documentos a agregar" />
+					<groupbox hflex="1" vflex="1"> 
+		                <listbox id="lstArchAdjuntos" model="@load(vm.documentos)" hflex="1" vflex="1" mold="paging" pageSize="50" checkmark="true"
+					multiple="true" autopaging="false" onSelect="@command('seleccionarDocumentos')" selectedItems="@bind(vm.documentosSeleccionados)" >
+		                    <listhead>
+		                    	<listheader hflex="min" vflex="min" />
+		                        <listheader label="${c:l('commons.label.nombre')}" hflex="min" sort="auto(nombre)"/>
+		                        <listheader label="${c:l('commons.label.area')}" hflex="min" sort="auto(areaNombre)"/>
+		                        <listheader label="${c:l('commons.label.serie')}" hflex="min" sort="auto(serieNombre)"/>
+		                        <listheader label="${c:l('commons.label.subserie')}" hflex="min" sort="auto(subserieNombre)"/>
+		                        <listheader label="${c:l('commons.label.tipoDocumetal')}" hflex="min" sort="auto(tipoDocumentalNombre)"/>
+		                        <listheader label="${c:l('trd.agregarDocumento.fechaCreacion')}" hflex="min" sort="auto(fechaCrea)" /> 
+		                        <listheader label="${c:l('correspondencia.commons.label.radicado')}" hflex="min" sort="auto(radicado)"/>
+		                        <listheader label="${c:l('correspondencia.label.radicacion.usuario')}" hflex="min" sort="auto(usuarioCreaNombreCompleto)"/>
+		                        <listheader label="${c:l('trd.agregarDocumento.numeroExpedientesAsociados')}" hflex="min" />
+		                    </listhead>
+		                    <template name="model">
+								<listitem>
+									<listcell />
+									<listcell label="@load(each.nombre)" style="text-align: justify" />
+									<listcell label="@load(each.areaNombre)" style="text-align: justify" />
+									<listcell label="@load(each.serieNombre)" style="text-align: justify" />
+									<listcell label="@load(each.subserieNombre)" style="text-align: justify" />
+									<listcell label="@load(each.tipoDocumentalNombre)" style="text-align: justify" />
+									<listcell label="@load(each.fechaCrea)" style="text-align: justify" />
+									<listcell label="@load(each.radicado)" style="text-align: justify" />
+									<listcell label="@load(each.usuarioCreaNombreCompleto)" style="text-align: justify" />
+									
+									<listcell>
+										<a label="@load(each.numeroExpedientes)" visible="@load(each.numeroExpedientes ne 0? true: false)" style="text-align: justify" onClick="@command('ver', arg1=each.documentoId)"/>
+										<label value="@load(each.numeroExpedientes)" visible="@load(each.numeroExpedientes eq 0? true: false)" style="text-align: justify" />
+									</listcell>
+								</listitem>
+							</template>
+		                </listbox>
+	            	</groupbox>
+				</vlayout>
+        	</center>
+        </borderlayout>
+        <groupbox id="grbBotones" mold="3d" closable="false" hflex="1" vflex="min" style="text-align:center;">
+				<hlayout>
+					<button id="btnAceptar" onClick="@command('aceptarSeleccion')" label="Aceptar" />
+					<button id="btnCancelar" onClick="@command('cancelarSeleccion')" label="Cancelar" />
+					<button id="btnCrearDocumento" onClick="@command('cancelarSeleccion')" label="Crear documento" />
+				</hlayout>
+			</groupbox>
+        </vlayout>
+    </window>
+</zk>

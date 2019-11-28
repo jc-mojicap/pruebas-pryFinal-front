@@ -1,0 +1,64 @@
+/*
+ * Archivo: leame.txt
+ * Fecha creacion: 27/02/2017
+ * Todos los derechos de propiedad intelectual e industrial sobre esta
+ * aplicacion son de propiedad exclusiva del GRUPO ASESORIA EN
+ * SISTEMATIZACION DE DATOS SOCIEDAD POR ACCIONES SIMPLIFICADA – GRUPO ASD S.A.S.
+ * Su uso, alteracion, reproduccion o modificacion sin la debida
+ * consentimiento por escrito de GRUPO ASD S.A.S.
+ * autorizacion por parte de su autor quedan totalmente prohibidos.
+ * 
+ * Este programa se encuentra protegido por las disposiciones de la
+ * Ley 23 de 1982 y demas normas concordantes sobre derechos de autor y
+ * propiedad intelectual. Su uso no autorizado dara lugar a las sanciones
+ * previstas en la Ley.
+ */
+
+PROYECTO: Gestion documental
+
+COMPONENTE: gestion-documental-presentacion
+
+DESCRIPCION: 
+
+Proyecto de capa de presentacion para gestión documental.
+
+ENTORNO DE DESARROLLO:
+
+- Java 8.
+- ZK.
+- Maven.
+
+INSTRUCCIONES TECNICAS
+
+* Configuración:
+
+En la carpeta src\main\resources se encuentra el archivo application.properties
+con las configuraciones de la aplicación.
+
+Para evitar modificar directamente este archivo, se puede crear un archivo 
+application-ext.properties en el home del usuario que ejecuta el servidor de aplicaciones
+y en este archivo unicamente se sobrescriben las configuraciones necesarias para el 
+ambiente.
+
+* Ambiente desarrollo:
+
+** Ejecución:
+
+> mvn jetty:run
+
+** Ejecución de verificación de estilos:
+
+> mvn checkstyle:checkstyle
+
+** Empaquetar en war:
+
+> mvn clean compile package
+
+** Ejecución de pruebas unitarias:
+
+> mvn test
+
+** Generación de JavaDoc
+
+> mvn javadoc:javadoc
+

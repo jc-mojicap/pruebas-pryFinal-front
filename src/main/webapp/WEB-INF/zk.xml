@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<preference>
+		<name>org.zkoss.zk.ui.WebApp.name</name>
+		<value>Gestión Documental</value>
+	</preference>
+	<session-config>
+        <device-type>ajax</device-type>
+        <automatic-timeout>true</automatic-timeout>
+        <session-timeout>900</session-timeout>
+        <timeout-message>script:<![CDATA[
+	   	   $("#z-timeout").remove();
+		   $('body').append('<div id="z-timeout">'
+                                     +'<span>'
+                                       +'Su sesi&oacuten ha caducado, <b>mueva el cursor</b> para refrescar...'
+                                       +'<img id="z-timeout-loader"/>'
+                                     +'</span>'
+                                   +'</div>');
+		   $("#z-timeout").slideDown('fast');
+		   $('body').mouseover(function() {
+                        $("#z-timeout").slideUp('fast');
+			$('body').fadeOut('slow');
+			setTimeout("location.reload()", 1700);
+		   });
+	    ]]>
+        </timeout-message>
+    </session-config>
+	<preference>
+		<name>org.zkoss.zk.ui.WebApp.name</name>
+		<value>gestion-documental-presentacion</value>
+	</preference>
+</zk>

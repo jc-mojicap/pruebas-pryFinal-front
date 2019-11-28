@@ -1,0 +1,43 @@
+<?page title="Agregar Subserie" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="windowAgregarSubserie" border="normal"
+		closable="true" sizable="true" maximizable="true" height="500px"
+		width="800px" apply="org.zkoss.bind.BindComposer"
+		style="min-height:500px"
+		viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.trd.AgregarSubserieController')">
+		<vlayout hflex="1" vflex="1">
+			<groupbox id="grbBusqueda" mold="3d" closable="false"
+				hflex="1" vflex="min" style="text-align:center;">
+				<hlayout>
+					<label value="Buscar" />
+					<textbox id="txtBusqueda" width="500px" onOK="@command('buscarSubserieXTextbox')" />
+					<button id="btnBuscar" label="Buscar" onClick="@command('buscarSubserieXButton')" ></button>
+				</hlayout>
+			</groupbox>
+			<groupbox id="grbListbox" mold="3d" closable="false"
+				hflex="1" vflex="1">
+				<listbox id="lstAreas" model="@load(vm.subseries)" hflex="1" vflex="1" mold="paging" pageSize="50" checkmark="true"
+					multiple="true" autopaging="false" onSelect="@command('seleccionarSubseries')" selectedItems="@bind(vm.subseriesSeleccionadas)" >
+					<listhead>
+						<listheader hflex="min" vflex="min" />
+						<listheader label="Código" hflex="min" />
+						<listheader label="Nombre" hflex="max" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell />
+							<listcell label="@load(each.subserieId)" style="text-align: justify" />
+							<listcell label="@load(each.nombre)" style="text-align: justify" />
+						</listitem>
+					</template>
+				</listbox>
+			</groupbox>
+			<groupbox id="grbBotones" mold="3d" closable="false" hflex="1" vflex="min" style="text-align:center;">
+				<hlayout>
+					<button id="btnAceptar" onClick="@command('aceptarSeleccion')" label="Aceptar" />
+					<button id="btnCancelar" onClick="@command('cancelarSeleccion')" label="Cancelar" />
+				</hlayout>
+			</groupbox>
+		</vlayout>
+	</window>
+</zk>

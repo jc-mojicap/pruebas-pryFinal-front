@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Agregar Documento" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window id="windowExpedientesAsociados" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.trd.ExpedientesAsociadosToDocumentoController')"
+    position="center" mode="overlapped" border="normal" title="${c:l('correspondencia.title.agregarTerceros')}"
+    closable="true" sizable="true" maximizable="true"
+    height="500px" width="1000px" style="min-height:500px">
+    
+        <style src="/css/estilo.css" />
+    
+        <vlayout hflex="1" vflex="1" >
+        <hlayout spacing="10px" style="margin:auto; text-align:center; padding:10px">
+                <label style="font-weight:bold; font-size:20px;" value="Expedientes asociados" />
+        </hlayout>
+				<vlayout hflex="1" vflex="1">
+					<groupbox hflex="1" vflex="1"> 
+		                <listbox id="lstArchAdjuntos" model="@load(vm.expedientes)" hflex="1" vflex="1" mold="paging" pageSize="50" checkmark="false"
+					multiple="true" autopaging="false" >
+		                    <listhead>
+		                        <listheader label="${c:l('commons.label.nombre')}" hflex="min" sort="auto(nombre)"/>
+		                        <listheader label="${c:l('commons.label.area')}" hflex="min" />
+		                        <listheader label="${c:l('commons.label.serie')}" hflex="min" />
+		                        <listheader label="${c:l('commons.label.subserie')}" hflex="min" />
+		                        <listheader label="${c:l('commons.label.estado')}" hflex="min" />
+		                        <listheader label="${c:l('trd.expedienteAsociado.opcion')}" hflex="min" />
+		                    </listhead>
+		                    <template name="model">
+								<listitem>
+									<listcell label="@load(each.nombre)" style="text-align: justify" />
+									<listcell label="@load(each.areaNombre)" style="text-align: justify" />
+									<listcell label="@load(each.serieNombre)" style="text-align: justify" />
+									<listcell label="@load(each.subserieNombre)" style="text-align: justify" />
+									<listcell label="@load(each.estadoNombre)" style="text-align: justify" />
+									<listcell>
+										<a label="Ver" style="text-align: justify" />
+									</listcell>
+								</listitem>
+							</template>
+		                </listbox>
+	            	</groupbox>
+				</vlayout>
+        		<groupbox id="grbBotones" mold="3d" closable="false" hflex="1" vflex="min" style="text-align:center;">
+				<hlayout>
+					<button id="btnAceptar" onClick="@command('aceptarCerrarVentana')" label="Aceptar" />
+				</hlayout>
+			</groupbox>
+        </vlayout>
+    </window>
+</zk>

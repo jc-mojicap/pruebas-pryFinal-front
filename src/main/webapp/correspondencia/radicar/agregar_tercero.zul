@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Agregar tercero" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window id="windowAddTerceros" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.correspondencia.AgregarTerceroController')"
+    position="center" mode="overlapped" border="normal" title="${c:l('correspondencia.title.agregarTerceros')}"
+    closable="true" sizable="true" maximizable="true"
+    height="500px" width="1000px" style="min-height:500px">
+    
+        <style src="/css/estilo.css" />
+    
+        <vlayout hflex="1" vflex="1" >
+            <hlayout spacing="10px" style="margin:auto; text-align:center; padding:10px">
+                <label value="${c:l('correspondencia.label.busquedaTercero')}:" />
+                <textbox id="txtBusqueda" width="400px" onOK="@command('cargarTerceros', arg1 = self.value)" />
+                <button label="${c:l('commons.button.buscar')}" onClick="@command('cargarTerceros', arg1 = txtBusqueda.value)"/>
+            </hlayout>
+            <groupbox hflex="1" vflex="1">
+                <listbox id="lstTerceros" model="@load(vm.terceros)" selectedItems="@bind(vm.tercerosSeleccionados)" 
+                hflex="1" vflex="1" mold="paging" pageSize="50" checkmark="true" multiple="true" 
+                emptyMessage="${c:l('commons.lista.mensajeVacio')}">
+                    <listhead>
+                        <listheader label="${c:l('correspondencia.label.radicacion.numeroIdentificacion')}" hflex="min" sort="auto(numero)"/>
+                        <listheader label="${c:l('commons.label.nombres')}" hflex="max" sort="auto(nombre)"/>
+                        <listheader label="${c:l('correspondencia.label.radicacion.responsable')}" hflex="max" sort="auto(responsable)"/>
+                        <listheader label="${c:l('commons.label.direccion')}" hflex="max" sort="auto(direccion)"/>
+                        <listheader label="${c:l('commons.label.ciudad')}" hflex="min" sort="auto(municipio)"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem>
+	                        <listcell label="@load(each.numero)" />
+	                        <listcell label="@load(each.nombre)" style="text-align: justify"/>
+	                        <listcell label="@load(each.responsable)" style="text-align: justify" />
+	                        <listcell label="@load(each.direccion)" style="text-align: justify"/>
+	                        <listcell label="@load(each.nombreMunicipio.concat(' (').concat(each.nombreDepartamento).concat(')'))" style="text-align: justify"/>
+	                    </listitem>
+                    </template>
+                </listbox>
+            </groupbox>
+            <hlayout style="text-align:right; padding:5px">
+                <button id="btnAceptar" label="${c:l('commons.button.aceptarSeleccion')}" onClick="@command('aceptarSeleccion')" disabled="@load(empty vm.tercerosSeleccionados)"/>
+            </hlayout>
+        </vlayout>
+    </window>
+</zk>

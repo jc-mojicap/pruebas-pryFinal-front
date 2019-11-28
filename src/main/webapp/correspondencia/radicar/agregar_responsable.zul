@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="LYRA WEB" contentType="text/html;charset=UTF-8"?>
+<!-- <?init class="co.com.grupoasd.common.ValidarLogin"?> -->
+<zk>
+    <window id="winAddResponsables" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.correspondencia.AgregarResponsableController')"
+    position="center" mode="overlapped" border="normal" title="${c:l('correspondencia.title.agregarResponsable')}"
+    closable="true" sizable="true" maximizable="true"
+    height="500px" width="1000px" style="min-height:500px">
+    
+        <style src="/css/estilo.css" />
+    
+        <vlayout hflex="1" vflex="1" >
+            <hlayout spacing="10px" style="margin:auto; text-align:center; padding:10px">
+                <label value="${c:l('correspondencia.label.busquedaResponsable')}:" />
+                <textbox id="txtBusqueda" width="400px" onOK="@command('cargarResponsables', arg1 = self.value)" />
+                <button label="${c:l('commons.button.buscar')}" onClick="@command('cargarResponsables', arg1 = txtBusqueda.value)"/>
+            </hlayout>
+            <groupbox hflex="1" vflex="1">
+                <listbox id="lstResponsables" model="@load(vm.usuarios)" selectedItems="@bind(vm.usuariosSeleccionados)" 
+                hflex="1" vflex="1" mold="paging" pageSize="50" checkmark="true" multiple="true" 
+                emptyMessage="${c:l('commons.lista.mensajeVacio')}">
+                    <listhead>
+                        <listheader label="${c:l('correspondencia.label.radicacion.numeroIdentificacion')}" hflex="min" sort="auto(numeroIdentificacion)"/>
+                        <listheader label="${c:l('commons.label.nombres')}" hflex="max" sort="auto(nombreCompleto)"/>
+                        <listheader label="${c:l('correspondencia.label.radicacion.cargo')}" hflex="max" sort="auto(nombreRol)"/>
+                        <listheader label="${c:l('commons.label.areaProceso')}" hflex="max" sort="auto(nombreArea)"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem>
+                            <listcell label="@load(each.numeroIdentificacion)" />
+                            <listcell label="@load(each.nombreCompleto)" style="text-align: justify"/>
+                            <listcell label="@load(each.nombreRol)" style="text-align: justify" />
+                            <listcell label="@load(each.nombreArea)" style="text-align: justify"/>
+                        </listitem>
+                    </template>
+                </listbox>
+            </groupbox>
+            <hlayout style="text-align:right; padding:5px">
+                <button id="btnAceptar" label="${c:l('commons.button.aceptarSeleccion')}" onClick="@command('aceptarSeleccion')" disabled="@load(empty vm.usuariosSeleccionados)"/>
+            </hlayout>
+        </vlayout>
+    </window>
+</zk>

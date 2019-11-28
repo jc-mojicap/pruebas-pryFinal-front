@@ -1,0 +1,20 @@
+target/
+
+nb-configuration.xml
+
+
+###########
+# Eclipse #
+###########
+.project
+.settings
+.classpath
+/.classpath
+/.project
+/.settings/
+/bin/
+
+#########
+# Maven #
+#########
+target

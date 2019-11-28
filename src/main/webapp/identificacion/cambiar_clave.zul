@@ -1,0 +1,48 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Cambiar clave" contentType="text/html;charset=UTF-8"?>
+<?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?>
+<zk>
+	<window id="windowCambiarClave" title="${c:l('autenticacion.title.cambiarPassword')}" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm')@init('co.com.grupoasd.documental.presentacion.controller.identificacion.CambiarClaveController')"
+		validationMessages="@id('vmsgs')" position="center" mode="overlapped" border="normal" width="340px" height="min" closable="true">
+		<style src="/css/estilo.css" />
+		<listbox id="listboxCambiarClave" hflex="1" vflex="1" nonselectableTags="*">
+			<listhead>
+				<listheader hflex="min" />
+				<listheader />
+			</listhead>
+			<listitem>
+				<listcell>
+					<label value="${c:l('autenticacion.label.password.current')}:" sclass="texto_normal" />
+				</listcell>
+				<listcell>
+					<textbox id="txtClaveActual" maxlength="50" type="password" width="97%" focus="true"
+						onFocus="self.select()" sclass="obligatorio" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell>
+					<label value="${c:l('autenticacion.label.password.new')}:" sclass="texto_normal" />
+				</listcell>
+				<listcell>
+					<textbox id="txtClaveNueva" maxlength="50" type="password" width="97%"
+						onFocus="self.select()" sclass="obligatorio" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell>
+					<label value="${c:l('autenticacion.label.password.confirm')}:" sclass="texto_normal" />
+				</listcell>
+				<listcell>
+					<textbox id="txtConfirmacionClaveNueva" maxlength="50" type="password" width="97%"
+						onFocus="self.select()" sclass="obligatorio" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell span="2" style="text-align: center">
+					<button id="btnCambiarClave" label="${c:l('autenticacion.button.cambiarPassword')}" onClick="@command('cambiarClave')" />
+				</listcell>
+			</listitem>
+		</listbox>
+	</window>
+</zk>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Gestionar radicado" contentType="text/html;charset=UTF-8"?>
+<?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?>
+<zk>
+    <window id="windowGestionarRadicado"
+        title="${c:l('correspondencia.title.gestionarCorrespondencia')}"
+        apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.correspondencia.GestionarRadicadoController')"
+        border="normal" closable="true" sizable="true" maximizable="true"
+        maximized="true" height="85%" width="90%"
+        onClose="@command('cerrarVentana', arg1=event)">
+        
+        <style src="/css/estilo.css" />
+        <script type="text/javascript" src="/js/js_control.js"></script>
+    
+        <vlayout hflex="1" vflex="1" style="overflow: auto;padding-bottom:10px">
+            <borderlayout style="min-height: 500px">
+                <north border="none" vflex="min" style="padding:5px">
+                    <listbox nonselectableTags="*">
+                        <listhead>
+                            <listheader hflex="min" />
+                            <listheader hflex="max" />
+                            <listheader hflex="min" />
+                            <listheader hflex="max" />
+                            <listheader hflex="min" />
+                            <listheader hflex="max" />
+                        </listhead>
+                        <listitem>
+                            <listcell>
+                                <label value="${c:l('correspondencia.commons.label.radicado')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblRadicado" value="@load(vm.radicado.radicado)" />
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('correspondencia.commons.label.fechaRadicado')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblFechaRadicado" value="${c:formatDate(vm.radicado.fechaRadicacion, c:l('commons.config.dateTimeFormat'))}" />
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('correspondencia.commons.label.usuarioRadicacion')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblUsuarioRadicacion" />
+                            </listcell>
+                        </listitem>
+                        <listitem>
+                            <listcell>
+                                <label value="${c:l('correspondencia.commons.label.tipoRadicado')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblTipoRadicado"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('correspondencia.label.radicacion.cantidadFolios')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblCantFolios" value="@load(vm.radicado.cantidadFolios)" />
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('commons.label.canal')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblCanal" value="@load(vm.radicado.nombreCanal)"/>
+                            </listcell>
+                        </listitem>
+                        <listitem>
+                            <listcell>
+                                <label value="${c:l('commons.label.remitente')}:" />
+                            </listcell>
+                            <listcell span="3">
+                                <label id="lblRemitente" value="@load(not empty vm.radicado.usuarioRemitente ? vm.radicado.usuarioRemitente.nombreCompleto : vm.radicado.terceroRemitente.nombre)"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('correspondencia.commons.label.radicadoRemitente')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblRadicadoExt" value="@load(vm.radicado.radicadoExterno)"/>
+                            </listcell>
+                        </listitem>
+                        <listitem>
+                            <listcell>
+                                <label value="${c:l('commons.label.asunto')}:" />
+                            </listcell>
+                            <listcell span="5">
+                                <label id="lblAsunto" value="@load(vm.radicado.asunto)"/>
+                            </listcell>
+                        </listitem>
+                        <listitem>
+                            <listcell>
+                                <label value="${c:l('commons.label.areaProceso')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblAreaProceso" value="@load(vm.radicado.nombreArea)"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('commons.label.serie')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblSerie" value="@load(vm.radicado.nombreSerie)"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('commons.label.subserie')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblSubserie" value="@load(vm.radicado.nombreSubserie)"/>
+                            </listcell>
+                        </listitem>
+                        <listitem>
+                            <listcell>
+                                <label value="${c:l('commons.label.requiereRespuesta')}:" />
+                            </listcell>
+                            <listcell>
+                                <label id="lblRequiereRta" value="@load(vm.radicado.requiereRespuesta ? 'SI' : 'NO')"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${c:l('correspondencia.commons.label.fechaLimiteRespuesta')}:" />
+                            </listcell>
+                            <listcell span="3">
+                                <label id="lblFechaLimiteRta" />
+                            </listcell>
+                        </listitem>
+                    </listbox>
+                </north>
+                <center id="center" border="none" autoscroll="true" style="padding:5px">
+                    <borderlayout>
+<!--           Adjuntar archivos -->
+                        <center border="none">
+                            <groupbox id="grbAdjuntos" mold="3d" closable="false" hflex="1" vflex="1" style="min-height:200px">
+                                <caption label="${c:l('correspondencia.commons.label.adjuntarArchivos')}">
+                                    <toolbarbutton image="/recursos/icons/information.png" onClick='popupFormatosValidos.open(self,"end_after")' visible="@load(vm.radicado.requiereRespuesta)"/>
+                                </caption>
+                                <listbox id="lstArchAdjuntos" hflex="1" vflex="1" model="@load(vm.adjuntos)">
+                                    <listhead>
+                                        <listheader label="${c:l('correspondencia.commons.label.nombreArchivo')}" hflex="max" />
+                                        <listheader label="${c:l('commons.label.fecha')}" hflex="min" />
+                                        <listheader label="${c:l('commons.label.usuario')}" hflex="min" />
+                                        <listheader label="${c:l('commons.label.tipoDocumetal')}" hflex="min" />
+                                        <listheader label="${c:l('commons.label.opciones')}" width="67px" />
+                                    </listhead>
+                                    <template name="model">
+                                        <listitem>
+                                            <listcell label="@load(each.ruta.contains('/') ? each.ruta.substring(each.ruta.lastIndexOf('/')+1, each.ruta.length()) : each.ruta)" />
+                                            <listcell label="${c:formatDate(each.fecha, c:l('commons.config.dateTimeFormat'))}" />
+                                            <listcell label="@load(each.nombreUsuario)" />
+                                            <listcell label="@load(each.nombreTipoDocumental)" />
+                                            <listcell>
+                                                <toolbarbutton image="/recursos/icons/search_file.png" onClick="@command('mostrarAdjunto', arg1=each)"/>
+                                                <toolbarbutton image="@load(vm.radicado.requiereRespuesta ? '/recursos/icons/delete.png' : '/recursos/icons/delete_disabled.png')" disabled="@load(!vm.radicado.requiereRespuesta)" onClick="@command('eliminarAdjunto', arg1=each)"/>
+                                            </listcell>
+                                        </listitem>
+                                    </template>
+                                    <listfoot>
+                                        <listfooter span="5" visible="@load(vm.radicado.requiereRespuesta)">
+                                            <hlayout style="float:right;">
+                                                <label id="lblTiposDoc" value="${c:l('commons.label.tipoDocumetal')}" />
+                                                <combobox id="cmbTipoDocumental" model="@load(vm.tiposDocumentales)" selectedItem="@bind(vm.tipoDocumentalSeleccionado)" sclass="obligatorio"
+                                                    width="80%" placeholder="${c:l('commons.label.seleccione')}" readonly="true" >
+                                                    <template name="model">
+                                                        <comboitem value="@load(each)" label="@load(each.nombre)" />
+                                                    </template> 
+                                                </combobox>
+                                                <button id="btnAgregarArchivo" label="${c:l('commons.button.agregarArchivo')}" upload="maxsize=20480,native" disabled="@load(empty vm.tipoDocumentalSeleccionado)" onUpload="@command('cargarArchivo', arg1=event)" autodisable="self" />
+                                            </hlayout>
+                                        </listfooter>
+                                    </listfoot>
+                                </listbox>
+                            </groupbox>
+                        </center>
+<!--          Fin adjuntar archivos -->
+<!--          Responsables -->
+                        <east border="none" size="30%">
+                            <hbox vflex="1" hflex="1">
+                                <groupbox id="grbResponsables" mold="3d" closable="false" hflex="7" vflex="1" style="min-height:100px;max-height:100%;overflow:auto;padding-left:5px" sclass="conoverflow">
+                                    <caption label="${c:l('correspondencia.label.radicacion.responsables')}" />
+                                    <vbox spacing="5px" vflex="1" style="max-height:100%; padding: 10px">
+                                        <label value="${c:l('correspondencia.label.radicacion.responsablePrincipal')}:" style="font-weight: bold; cursor:default" />
+                                        <label id="lblResponsablePrincipal" value="@load(not empty vm.radicado.terceroPrincipal ? vm.radicado.terceroPrincipal.nombre : vm.radicado.usuarioPrincipal.nombreCompleto)" style="cursor:default"/>
+                                        <space/>
+                                        <label value="${c:l('correspondencia.label.radicacion.responsableOtros')}:" style="font-weight: bold;cursor:default" />
+                                        <vbox id="lytOtrosResponsables" spacing="2px" vflex="1" style="max-height:100%;overflow:auto">
+                                            <listbox model="@load(not empty vm.radicado.tercerosDestinatarios ? vm.radicado.tercerosDestinatarios : vm.radicado.usuariosDestinatarios)" nonselectableTags="*" sclass="sinborde">
+                                            <template name="model">
+                                                <listitem style="border:none;">
+                                                    <listcell label="@load(not empty vm.radicado.tercerosDestinatarios ? each.nombre : each.nombreCompleto)">
+                                                    </listcell>
+                                                </listitem>
+                                            </template>
+                                            </listbox>
+                                        </vbox>
+                                    </vbox>
+                                </groupbox>
+                            </hbox>
+                        </east>
+<!--          Fin Responsables -->                        
+                        <south border="none" vflex="min">
+                            <hlayout style="margin:auto;text-align:center;padding-top:10px;" spacing="20px">
+                                <button id="btnActualizar" label="${c:l('commons.button.actualizarArchivos')}" disabled="@load(!vm.radicado.requiereRespuesta)" onClick="@command('actualizarArchivos')" autodisable="self" />
+                                <button id="btnRechazar" label="${c:l('commons.button.rechazar')}" onClick="@command('rechazarRadicado')" autodisable="self" />
+                                <button id="btnCancelar" label="${c:l('commons.button.cancelar')}" onClick="@command('cerrarVentana', arg1=event)" autodisable="self" />
+                                <button id="btnFinalizarGestion" label="${c:l('commons.button.finalizarGestion')}" visible="@load(!vm.radicado.requiereRespuesta)" autodisable="self" onClick="@command('finalizarGestion')" />
+                            </hlayout>
+                        </south>
+                    </borderlayout>
+                </center>
+            </borderlayout>
+            <vlayout hflex="1" spacing="0px" style="min-height:250px; padding-bottom:10px; padding-right:5px" height="450px">
+                <hlayout hflex="1" vflex="1" spacing="5px">
+<!--          Comentario -->                    
+                    <groupbox mold="3d" closable="false" hflex="1" vflex="1" style="min-height:100px">
+                        <caption label="${c:l('commons.label.comentario')}" />
+                        <vlayout spacing="10px" style="padding:10px; max-width:100%" hflex="1" vflex="1">
+                            <hlayout style="max-width:100%" hflex="1" vflex="1">
+                                <textbox id="txtComentario" hflex="1" vflex="1" rows="3" tabbable="false" style="resize: none;" maxlength="1000" sclass="obligatorio" />
+                            </hlayout>
+                            <hlayout style="text-align:center">
+                                <button id="btnAddComent" label="${c:l('commons.button.agregarComentario')}" onClick="@command('agregarComentario')" autodisable="self" />
+                            </hlayout>
+                        </vlayout>
+                    </groupbox>
+<!--          Fin comentario -->
+<!--          Historico comentarios -->
+                    <groupbox mold="3d" closable="false" hflex="2" vflex="1">
+                        <caption label="${c:l('commons.label.comentarios')}" />
+                        <listbox id="lstComentarios" hflex="1" vflex="1" model="@load(vm.radicado.comentarios)">
+                            <listhead>
+                                <listheader label="${c:l('commons.label.fecha')}" hflex="min" />
+                                <listheader label="${c:l('commons.label.usuario')}" hflex="min" />
+                                <listheader label="${c:l('commons.label.comentario')}" hflex="max" />
+                            </listhead>
+                            <template name="model">
+                                <listitem>
+                                    <listcell label="${c:formatDate(each.fecha, c:l('commons.config.dateTimeFormat'))}" />
+                                    <listcell label="@load(each.primerNombreUsuario.concat(' ').concat(each.segundoNombreUsuario).concat(' ').concat(each.primerApellidoUsuario).concat(' ').concat(each.segundoApellidoUsuario))" />
+                                    <listcell label="@load(each.comentario)" />
+                                </listitem>
+                            </template>
+                        </listbox>
+                    </groupbox>
+<!--          Fin historico comentarios -->
+                </hlayout>
+<!--          Trazabilidad -->                
+                <groupbox mold="3d" closable="false" hflex="6" vflex="1" style="padding-top:10px;">
+                    <caption label="${c:l('commons.label.trazabilidad')}" />
+                    <listbox id="lstTrazabilidad" hflex="1" vflex="1" model="@load(vm.bitacora)">
+                        <listhead>
+                            <listheader label="${c:l('commons.label.fecha')}" hflex="min" />
+                            <listheader label="${c:l('commons.label.usuario')}" hflex="min" />
+                            <listheader label="${c:l('commons.label.campo')}" hflex="min" />
+                            <listheader label="${c:l('commons.label.cambio')}" hflex="max" />
+                        </listhead>
+                        <template name="model">
+                            <listitem>
+                                <listcell label="${c:formatDate(each.fecha, c:l('commons.config.dateTimeFormat'))}"/>
+                                <listcell label="@load(each.usuario.nombreCompleto)" />
+                                <listcell label="@load(each.campo)" />
+<!--                                 <listcell label="@load(each.valorAnterior.concat(' => ').concat(each.valorNuevo))" /> -->
+                                <listcell>
+                                    <label value="@load(each.valorAnterior)"/>
+                                    <label value=" => " style="font-weight: bold;font-size: 120%"/>
+                                    <label value="@load(each.valorNuevo)"/>
+                                </listcell>
+                            </listitem>
+                        </template>
+                    </listbox>
+                </groupbox>
+<!--          Fin trazabilidad -->
+            </vlayout>
+        </vlayout>
+        <popup id="popupFormatosValidos" width="250px">
+            <listbox id="lstFormatos" height="200px" nonselectableTags="*">
+                <auxhead>
+                    <auxheader colspan="3" label="${c:l('correspondencia.commons.label.formatosPermitidos')}" style="text-align:center"/>
+                </auxhead>
+                <listhead>
+                    <listheader />
+                    <listheader />
+                    <listheader />
+                </listhead>
+            </listbox>
+        </popup>
+    </window>
+</zk>

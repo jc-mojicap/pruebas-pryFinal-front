@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Administrar Tablas de Retencion Documental" contentType="text/html;charset=UTF-8"?>
+<?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?>
+<zk>
+	<window id="windowsAdminTablaRet"
+		title="${c:l('retencion.admin.titulo')}"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.trd.AdminTablaRetController')"
+		border="normal" closable="true" sizable="true" maximizable="true"
+		maximized="true" height="85%" width="150%" style="overflow:auto;">
+
+		<style src="/css/estilo.css" />
+		<script type="text/javascript" src="/js/js_control.js"></script>
+
+		<vlayout hflex="1" vflex="1" style="overflow: auto;">
+			<borderlayout style="min-height: 800px;">
+				<north vflex="min" border="none"
+					style="padding:5px; text-align:center;">
+					<label style="font-weight:bold; font-size:20px;"
+						value="Administrar Tablas de Retención Documental" />
+				</north>
+				<center autoscroll="true" border="none"
+					style="padding:5px">
+					<vlayout vflex="1" hflex="1">
+
+						<groupbox id="grbBusqueda" mold="3d"
+							closable="false" hflex="1" vflex="min"
+							style="text-align:center;">
+							<hlayout>
+								<label value="Buscar" />
+								<textbox id="txtBusqueda" width="500px"/>
+								<button id="btnBuscar" label="Buscar"
+									onClick="@command('buscarTrdXButton')">
+								</button>
+							</hlayout>
+						</groupbox>
+						<groupbox id="grbTable" mold="3d"
+							closable="false" hflex="1" vflex="min"
+							style="text-align:center;">
+							<caption
+								label="Seleccione la TRD a editar:" />
+							<listbox id="lstTrds"
+								model="@load(vm.listadoTrds)"
+								selectedItem="@bind(vm.trdSelected)"
+								hflex="1" vflex="1"
+								mold="paging" pageSize="50" multiple="false"
+								emptyMessage="${c:l('retencion.admin.label.listado.vacio')}"
+								onSelect="@command('habilitarBtn')">
+								<listhead>									
+									<listheader label="${c:l('retencion.admin.table.trdnombre')}" hflex="5" sort="auto(nombre)" />
+									<listheader label="${c:l('retencion.admin.table.fechacreacion')}" hflex="3" sort="auto(fechaCreacion)" />
+									<listheader	label="${c:l('retencion.admin.table.fechageneracion')}" hflex="3" sort="auto(fechaGeneracion)" />
+									<listheader label="${c:l('retencion.admin.table.estado')}" hflex="2" sort="auto(estado)" />
+									<listheader label="${c:l('retencion.admin.table.expediente')}" hflex="2" />
+									<listheader label="${c:l('retencion.admin.table.vigente')}" hflex="2" sort="auto(vigente)" />
+									<listheader label="${c:l('retencion.admin.table.opciones')}" hflex="2" />
+								</listhead>
+								<template name="model">
+									<listitem>										
+										<listcell
+											label="@load(each.nombre)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.fechaCreacion)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.fechaGeneracion)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.estado.nombre)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.estado.estadoId eq 1? each.totalExpendientes : 0)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.vigente? 'Si' : 'No')" style="text-align: justify">
+										</listcell>
+										<listcell>
+											<a label="Ver"
+												visible="@load(each.estado.estadoId ne 3? true: false)" style="text-align: justify" onClick="@command('ver', arg1=each)"/>
+											<a label="Exportar"
+												visible="@load(each.estado.estadoId ne 3? true: false)" style="text-align: justify" onClick="@command('exportar', arg1=each)"/>
+											<a label="Editar"
+												visible="@load(each.estado.estadoId eq 3? true: false)" style="text-align: justify" onClick="@command('editar', arg1=each)"/>
+											<a label="Eliminar"
+												visible="@load(each.estado.estadoId eq 3? true: false)" style="text-align: justify" onClick="@command('eliminar', arg1=each)"/>
+										</listcell>
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="8">
+										<hlayout style="text-align:center;">
+											<button id="btnNuevaTrd"
+											onClick="@command('nuevaTrd')" label="Configurar Nueva TRD" />
+										<button id="btnCopiarTrd"
+											onClick="@command('copiarTrd')" label="Copiar TRD"
+											disabled="true" />
+										</hlayout>
+									</listfooter>
+								</listfoot>
+							</listbox>
+						</groupbox>
+						<groupbox id="grbTableFiltro" mold="3d"
+							closable="false" hflex="1" vflex="min"
+							style="text-align:center;">
+							<caption
+								label="Seleccione la TRD a editar:" />
+							<listbox id="lstTrdsFiltro"
+								model="@load(vm.listadoTrdsFiltro)"
+								selectedItem="@bind(vm.trdSelected)"
+								hflex="1" vflex="1"
+								mold="paging" pageSize="50" multiple="false"
+								emptyMessage="${c:l('retencion.admin.label.listado.vacio')}"
+								onSelect="@command('habilitarBtn')">
+								<listhead>									
+									<listheader label="${c:l('retencion.admin.table.trdnombre')}" hflex="5" sort="auto(nombre)" />
+									<listheader label="${c:l('retencion.admin.table.fechacreacion')}" hflex="3" sort="auto(fechaCreacion)" />
+									<listheader	label="${c:l('retencion.admin.table.fechageneracion')}" hflex="3" sort="auto(fechaGeneracion)" />
+									<listheader label="${c:l('retencion.admin.table.estado')}" hflex="2" sort="auto(estado)" />
+									<listheader label="${c:l('retencion.admin.table.expediente')}" hflex="2" />
+									<listheader label="${c:l('retencion.admin.table.vigente')}" hflex="2" sort="auto(vigente)" />
+									<listheader label="${c:l('retencion.admin.table.opciones')}" hflex="2" />
+								</listhead>
+								<template name="model">
+									<listitem>										
+										<listcell
+											label="@load(each.nombre)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.fechaCreacion)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.fechaGeneracion)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.estado.nombre)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.estado.estadoId eq 1? each.totalExpendientes : 0)" style="text-align: justify">
+										</listcell>
+										<listcell
+											label="@load(each.vigente? 'Si' : 'No')" style="text-align: justify">
+										</listcell>
+										<listcell>
+											<a label="Ver"
+												visible="@load(each.estado.estadoId ne 3? true: false)" style="text-align: justify" onClick="@command('ver', arg1=each)"/>
+											<a label="Exportar"
+												visible="@load(each.estado.estadoId ne 3? true: false)" style="text-align: justify" onClick="@command('exportar', arg1=each)"/>
+											<a label="Editar"
+												visible="@load(each.estado.estadoId eq 3? true: false)" style="text-align: justify" onClick="@command('editar', arg1=each)"/>
+											<a label="Eliminar"
+												visible="@load(each.estado.estadoId eq 3? true: false)" style="text-align: justify" onClick="@command('eliminar', arg1=each)"/>
+										</listcell>
+									</listitem>
+								</template>
+								<listfoot>
+									<listfooter span="8">
+										<hlayout style="text-align:center;">
+											<button id="btnNuevaTrd2"
+											onClick="@command('nuevaTrd')" label="Configurar Nueva TRD" />
+										<button id="btnCopiarTrd2"
+											onClick="@command('copiarTrd')" label="Copiar TRD"
+											disabled="true" />
+										</hlayout>
+									</listfooter>
+								</listfoot>
+							</listbox>
+
+						</groupbox>
+					
+					</vlayout>
+				</center>
+			</borderlayout>
+		</vlayout>
+	</window>
+</zk>

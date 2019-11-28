@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="LYRA WEB" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="${c:l('correspondencia.commons.label.adminTerceros')}" border="normal" closable="true"
+		sizable="true" maximizable="true" maximized="false" height="80%"
+		width="80%" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.administracion.AdminTercerosController')"
+		validationMessages="@id('vmsgs')" position="center"
+		mode="overlapped">
+		<borderlayout hflex="1" vflex="1">
+			<north border="none">
+				<hlayout spacing="5px"
+					style="margin:auto;text-align:left;padding:7px;" hflex="1">
+					<label value="${c:l('commons.toolbarbutton.filtrar')}:" />
+					<textbox id="txtFiltroTercero"
+						tooltiptext="${c:l('correspondencia.label.radicacion.numeroIdentificacion')}" hflex="1"
+						onChanging="@command('filtrarTercero')"/>
+					<radiogroup id="rdgFiltroTercero"
+						style="padding:10px; max-width:50%; max-height:100%; border:100px"
+						orient="horizontal" model="@load(vm.modelFiltroTercero)" hflex="2" 
+						onCheck="@command('cambiarFiltro')">
+						<template name="model">
+							<radio value="@load(each)"
+								label="@load(each.valor)" style="padding:10px;"/>
+						</template>
+					</radiogroup>
+				</hlayout>
+			</north>
+			<center border="none">
+                <borderlayout hflex="1" vflex="1">
+                    <center border="none">
+                        <listbox id="lstTerceros"
+                        	emptyMessage="${c:l('commons.label.consultaSinResultados')}"
+                        	hflex="1" vflex="1"
+                        	model="@load(vm.terceros)"
+                        	selectedItem="@bind(vm.terceroSeleccionado)"
+                        	onSelect="@command('cargarTercero')">
+                        	<listhead>
+                        		<listheader id="lhdIdenti" hflex="min"
+                        			label="${c:l('correspondencia.label.radicacion.numeroIdentificacion')}"
+                        			sort="auto(numero)" />
+                        		<listheader id="lhdNombre" hflex="max"
+                        			label="${c:l('commons.label.nombre')}" sort="auto(nombre)" />
+                        		<listheader id="lhdResponsable"
+                        			hflex="min" label="${c:l('correspondencia.label.radicacion.responsable')}"
+                        			sort="auto(responsable)" />
+                        		<listheader id="lhdDependencia"
+                        			hflex="min" label="${c:l('correspondencia.label.radicacion.dependencia')}"
+                        			sort="auto(dependencia)" />
+                        		<listheader id="lhdCargo" hflex="max"
+                        			label="${c:l('correspondencia.label.radicacion.cargo')}" sort="auto(cargo)" />
+                        		<listheader id="lhdCiudad" hflex="min"
+                        			label="${c:l('commons.label.ciudad')}" sort="auto(municipio)" />
+                        		<listheader id="lhdActivo" hflex="min"
+                        			label="${c:l('commons.label.activo')}" sort="auto(inactivo)" />
+                        	</listhead>
+                        	<template name="model" var="tercero">
+                        		<listitem>
+                        			<listcell
+                        				label="@load(tercero.numero)" />
+                        			<listcell
+                        				label="@load(tercero.nombre)" />
+                        			<listcell
+                        				label="@load(tercero.responsable)" />
+                        			<listcell
+                        				label="@load(tercero.dependencia)" />
+                        			<listcell
+                        				label="@load(tercero.cargo)" />
+                        			<listcell
+                        				label="@load(tercero.nombreMunicipio)" />
+                        			<listcell label="${c:l('commons.label.no')}"
+                        				if="${tercero.inactivo == 'true'}" />
+                        			<listcell label="${c:l('commons.label.si')}"
+                        				if="${tercero.inactivo == 'false'}" />
+                        		</listitem>
+                        	</template>
+                        </listbox>
+                    </center>
+                    <south border="none">
+                    	<paging id="pageResult" autohide="false"
+                    		detailed="true" pageSize="50" onPaging="@command('paginar')">
+                    	</paging>
+                    </south>
+                </borderlayout>
+			</center>
+			<south border="none">
+				<groupbox>
+					<listbox>
+						<listhead>
+							<listheader hflex="min" />
+							<listheader hflex="max" />
+							<listheader width="120px" />
+							<listheader hflex="max" />
+						</listhead>
+						<listitem>
+							<listcell label="${c:l('correspondencia.label.radicacion.numeroIdentificacion')}"/>
+							<listcell span="3">
+								<hlayout spacing="5px" hflex="1">
+									<textbox id="txtNumeroIdentificacion" 
+										onOK="@command('buscarNumero')" />
+									<label value="${c:l('commons.label.enterBuscar')}" />
+								</hlayout>
+							</listcell>
+						</listitem>
+						<listitem>
+							<listcell label="${c:l('commons.label.nombre')}" />
+							<listcell span="3">
+								<textbox id="txtNombre" hflex="1"/>
+							</listcell>
+						</listitem>
+						<listitem>
+							<listcell label="${c:l('autenticacion.label.correo')}" />
+							<listcell>
+								<textbox id="txtCorreo" hflex="1" />
+							</listcell>
+							<listcell>
+								<label value="${c:l('commons.label.diasCaida')}"
+									visible="false" />
+							</listcell>
+							<listcell>
+								<spinner id="intDiasCaida" value="1"
+									constraint="no empty, min 1" visible="false" />
+							</listcell>
+						</listitem>
+						<listitem>
+							<listcell label="${c:l('commons.label.direccion')}" />
+							<listcell>
+								<textbox id="txtDireccion" hflex="1" />
+							</listcell>
+							<listcell label="${c:l('commons.label.municipio')}" />
+							<listcell>
+								<combobox id="cmbMunicipio" width="90%"
+									readonly="true" model="@load(vm.municipios)"
+									constraint="strict"
+									selectedItem="@bind(vm.municipioSeleccionado)"
+									placeholder="${c:l('commons.label.seleccione')}" sclass="obligatorio">
+									<template name="model">
+										<comboitem value="@load(each)"
+											label="@load(each.municipioDepartamento)" />
+									</template>
+								</combobox>
+							</listcell>
+						</listitem>
+						<listitem>
+							<listcell label="${c:l('commons.label.telefono')}s" />
+							<listcell>
+								<textbox id="txtTelefonos" hflex="1" />
+							</listcell>
+							<listcell label="${c:l('correspondencia.label.radicacion.responsable')}" />
+							<listcell>
+								<textbox id="txtResponsable" hflex="1" />
+							</listcell>
+						</listitem>
+						<listitem>
+							<listcell label="${c:l('correspondencia.label.radicacion.dependencia')}" />
+							<listcell>
+								<textbox id="txtDependencia" hflex="1" />
+							</listcell>
+							<listcell label="${c:l('correspondencia.label.radicacion.cargo')}"/>
+							<listcell>
+								<textbox id="txtCargo" hflex="1" />
+							</listcell>
+						</listitem>
+						<listfoot>
+							<listfooter span="4">
+								<hlayout spacing="10px"
+									style="float:right;">
+									<button id="btnCrear" label="${c:l('commons.button.crear')}" onClick="@command('guardar', metodo = 'crear')" />
+									<button id="btnActualizar"
+										label="${c:l('commons.button.actualizar')}" disabled="true" onClick="@command('guardar', metodo = 'actualizar')"/>
+									<button id="btnEliminar"
+										label="${c:l('commons.toolbarbutton.eliminar')}" disabled="true" onClick="@command('eliminar')"/>
+									<button id="btnImportar"
+										label="${c:l('correspondencia.label.importarTerceros')}"
+										upload="native,true,maxsize=-1,multiple=false" onUpload="@command('importar')"/>
+									<button id="btnLimpiar"
+										label="${c:l('commons.button.limpiar')}" onClick="@command('limpiar')"/>
+								</hlayout>
+							</listfooter>
+						</listfoot>
+					</listbox>
+				</groupbox>
+			</south>
+		</borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,59 @@
+<?page title="Agregar metadatos" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!-- <?init class="co.com.grupoasd.documental.presentacion.listener.ValidarSesion"?> -->
+<zk>
+    <window id="winAddMetadatos" title="${c:l('trd.metadatos.title.agregarMetadatos')}" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.administracion.AgregarMetadatosController')"
+    position="center" mode="overlapped" border="normal" closable="true" sizable="true" maximizable="true"
+    height="500px" width="600px" style="min-height:500px">
+    
+        <style src="/css/estilo.css" />
+        
+        <borderlayout>
+            <north style="text-align:center; border:none">
+                <label value="${c:l('trd.commons.label.metadatos')}" style="font-size:30px"/>
+            </north>
+            <center style="padding-top:15px; border:none">
+                <vbox width="100%">
+                    <vlayout hflex="1" vflex="1" >
+                        <hlayout spacing="10px" style="margin:auto; text-align:center; padding:10px">
+                            <label value="${c:l('commons.label.buscar')}:" />
+                            <textbox id="txtBusquedaMetadatos" width="300px" onOK="@command('cargarMetadatos', arg1 = self.value)" maxlength="150"/>
+                            <button label="${c:l('commons.button.buscar')}" onClick="@command('cargarMetadatos', arg1 = txtBusquedaMetadatos.value)"/>
+                        </hlayout>
+                        <groupbox hflex="1" vflex="1">
+                            <listbox model="@load(vm.metadatos)" selectedItems="@bind(vm.metadatosSeleccionados)" 
+                                mold="paging" pageSize="50" checkmark="true" multiple="true" 
+                                emptyMessage="${c:l('commons.lista.mensajeVacio')}" height="290px">
+                                <listhead>
+                                    <listheader width="40px" align="center"/>
+                                    <listheader label="${c:l('commons.label.id')}" hflex="min" />
+                                    <listheader label="${c:l('commons.label.tipo')}" />
+                                    <listheader label="${c:l('commons.label.nombre')}" />
+                                    <listheader width="60px" align="center"/>
+                                </listhead>
+                                <template name="model">
+                                    <listitem>
+                                        <listcell />
+                                        <listcell label="@load(each.metadatoId)" />
+                                        <listcell label="@load(each.nombreTipoDato)" style="text-align: justify"/>
+                                        <listcell label="@load(each.nombre)" style="text-align: justify" />
+                                        <listcell>
+                                            <image src="/recursos/icons/search.png" style="cursor:pointer" 
+                                            tooltiptext="@load(c:cat(c:cat(c:cat('Estado: ', each.inactivo ? 'Inactivo&#13;' : 'Activo&#13;'), not empty each.longitud ? 'Longitud: '.concat(each.longitud).concat('&#13;') :''), not empty each.expresionRegular ? 'Expresión regular: '.concat(each.expresionRegular) : ''))"/>
+                                        </listcell>
+                                    </listitem>
+                                </template>
+                            </listbox>
+                        </groupbox>
+                        <hlayout style="text-align:center; padding:5px">
+                            <button label="${c:l('commons.button.agregarAgregar')}" onClick="@command('aceptarSeleccion')" disabled="@load(empty vm.metadatosSeleccionados)"/>
+                            <button label="${c:l('commons.button.cancelar')}" onClick="@command('cancelar')" />
+                            <button label="${c:l('trd.metadatos.button.administrarMetadatos')}" onClick="@command('administrarMetadatos')" visible="@load(vm.administrarMetadatos)"/>
+                        </hlayout>
+                    </vlayout>
+                </vbox>
+            </center>
+        </borderlayout>
+    </window>
+</zk>

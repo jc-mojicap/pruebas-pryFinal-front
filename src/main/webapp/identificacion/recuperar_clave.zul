@@ -1,0 +1,53 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Recuperar clave" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="windowRecuperarClave" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm')@init('co.com.grupoasd.documental.presentacion.controller.identificacion.RecuperarClaveController')"
+		validationMessages="@id('vmsgs')" position="center" mode="overlapped" border="normal" title="${c:l('autenticacion.title.recuperarClave')}"
+		width="340px" height="210px" closable="true">
+		<style src="/css/estilo.css" />
+			<listbox id="listboxDatosBasicos" hflex="1" vflex="1" nonselectableTags="*">
+				<listhead>
+					<listheader hflex="min" />
+					<listheader />
+				</listhead>
+				<listitem>
+					<listcell>
+						<label value="${c:l('autenticacion.label.usuario')}:" sclass="texto_normal" />
+					</listcell>
+					<listcell>
+						<textbox id="txtUsuario" width="97%" focus="true" 
+							onFocus="self.select()" sclass="obligatorio" maxlength="50" />
+					</listcell>
+				</listitem>
+				<listitem>
+					<listcell>
+						<label value="${c:l('autenticacion.label.correo')}:" sclass="texto_normal" />
+					</listcell>
+					<listcell>
+						<textbox id="txtCorreo" width="97%" onFocus="self.select()"
+							sclass="obligatorio" maxlength="100"/>
+					</listcell>
+				</listitem>
+				<listitem>
+					<listcell>
+						<label value="${c:l('autenticacion.label.empresa')}:" sclass="texto_normal" />
+					</listcell>
+					<listcell>
+						<combobox id="combo" width="97%" readonly="true" model="@load(vm.empresas)"
+							selectedItem="@bind(vm.empresaSeleccionada)"
+							placeholder="${c:l('commons.label.seleccione')}" sclass="obligatorio">
+							<template name="model">
+								<comboitem value="@load(each)" label="@load(each.nombre)" />
+							</template>
+						</combobox>
+					</listcell>
+				</listitem>
+				<listitem>
+					<listcell span="2" style="text-align: center">
+						<button id="btnRecuperar" label="${c:l('autenticacion.button.recuperarPassword')}" onClick="@command('enviarCorreoRecuperacion')" />
+					</listcell>
+				</listitem>
+			</listbox>
+	</window>
+</zk>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Gestión Documental" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window
+		title="${c:l('correspondencia.title.consultarCorrespondencia')}"
+		border="normal" closable="true" sizable="true" maximizable="true"
+		height="85%" width="90%" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('co.com.grupoasd.documental.presentacion.controller.correspondencia.ConsultaRadicadoController')"
+		validationMessages="@id('vmsgs')" position="center"
+		mode="overlapped">
+		<borderlayout hflex="1" vflex="1">
+			<north border="none">
+				<listbox nonselectableTags="*">
+					<listhead>
+						<listheader hflex="min" />
+						<listheader hflex="max" />
+						<listheader hflex="min" />
+						<listheader hflex="max" />
+						<listheader hflex="min" />
+						<listheader hflex="max" />
+					</listhead>
+					<listitem>
+						<listcell>
+							<label
+								value="${c:l('correspondencia.commons.label.radicado')}" />
+						</listcell>
+						<listcell>
+							<textbox id="txtRadicado" width="90%" />
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('correspondencia.commons.label.tipoRadicado')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbTipoRadicado" width="90%"
+								readonly="true" constraint="strict"
+								placeholder="${c:l('commons.label.seleccione')}">
+							</combobox>
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('commons.label.estado')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbEstado" width="90%"
+								readonly="true" model="@load(vm.estadosRadicados)"
+								constraint="strict"
+								selectedItem="@bind(vm.estadoRadicadoSeleccionado)"
+								placeholder="${c:l('commons.label.seleccione')}"
+								onChange="@command('cambiarEstado')">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombre)" />
+								</template>
+							</combobox>
+						</listcell>
+					</listitem>
+					<listitem>
+						<listcell>
+							<label
+								value="${c:l('commons.label.areaProceso')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbArea" width="90%"
+								readonly="true" model="@load(vm.areas)" constraint="strict"
+								selectedItem="@bind(vm.areaSeleccionada)"
+								onChange="@command('cargarInformacionSerie')"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombre)" />
+								</template>
+							</combobox>
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('commons.label.serie')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbSerie" width="90%"
+								readonly="true" model="@load(vm.series)" constraint="strict"
+								selectedItem="@bind(vm.serieSeleccionada)"
+								onChange="@command('cargarInformacionSubserie')"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombre)" />
+								</template>
+							</combobox>
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('commons.label.subserie')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbSubserie" width="90%"
+								readonly="true" model="@load(vm.subseries)" constraint="strict"
+								selectedItem="@bind(vm.subserieSeleccionada)"
+								onChange="@command('cargarInformacionTipoDocumental')"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombre)" />
+								</template>
+							</combobox>
+						</listcell>
+					</listitem>
+					<listitem>
+						<listcell>
+							<label
+								value="${c:l('commons.label.tipoDocumetal')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbTipoDoc" width="90%"
+								readonly="true" model="@load(vm.tiposDocumentales)"
+								constraint="strict"
+								selectedItem="@bind(vm.tipoDocumentalSeleccionado)"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombre)" />
+								</template>
+							</combobox>
+						</listcell>
+
+						<listcell>
+							<label
+								value="${c:l('correspondencia.commons.label.radicadoAsociado')}" />
+						</listcell>
+						<listcell>
+							<textbox id="txtRadicadoAsoc" width="90%" />
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('correspondencia.commons.label.radicadoRemitenteExt')}" />
+						</listcell>
+						<listcell>
+							<textbox id="txtRadicadoExt" width="90%" />
+						</listcell>
+					</listitem>
+					<listitem>
+						<listcell>
+							<label
+								value="${c:l('correspondencia.commons.label.fechaRadicadoIni')}" />
+						</listcell>
+						<listcell>
+							<datebox id="dtxFechaInicial" width="90%"
+								format="${c:l('commons.config.dateFormat')}"
+								onCreate="self.value = new Date()"
+								onChange="@command('validarFechaRadicacion')" />
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('correspondencia.commons.label.fechaRadicadoFin')}" />
+						</listcell>
+						<listcell>
+							<datebox id="dtxFechaFinal" width="90%"
+								format="${c:l('commons.config.dateFormat')}"
+								onCreate="self.value = new Date()"
+								onChange="@command('validarFechaRadicacion')" />
+						</listcell>
+
+						<listcell>
+							<label
+								value="${c:l('commons.label.fechaVencimiento')}" />
+						</listcell>
+						<listcell>
+							<datebox id="dtxFechaVencimiento"
+								width="90%" format="${c:l('commons.config.dateFormat')}"
+								onChange="@command('cambiarFechaVencimiento')" />
+						</listcell>
+					</listitem>
+					<listitem>
+						<listcell>
+							<label
+								value="${c:l('commons.label.canal')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbCanal" width="90%"
+								readonly="true" model="@load(vm.canales)" constraint="strict"
+								selectedItem="@bind(vm.canalieSeleccionado)"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombre)" />
+								</template>
+							</combobox>
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('commons.label.entidadRemitente')}"
+								sclass="texto_normal" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbEntidadRemi" width="90%"
+								readonly="true" model="@load(vm.tercerosRadicados)"
+								constraint="strict"
+								selectedItem="@bind(vm.terceroRadicadoSeleccionado)"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombreTercero)" />
+								</template>
+							</combobox>
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('commons.label.asignadoA')}" />
+						</listcell>
+						<listcell>
+							<combobox id="cmbAsignado" width="90%"
+								readonly="true" model="@load(vm.usuariosRadicados)"
+								constraint="strict"
+								selectedItem="@bind(vm.usuarioRadicadoSeleccionado)"
+								placeholder="${c:l('commons.label.seleccione')}">
+								<template name="model">
+									<comboitem value="@load(each)"
+										label="@load(each.nombreUsuario)" />
+								</template>
+							</combobox>
+						</listcell>
+					</listitem>
+					<listitem>
+						<listcell>
+							<label
+								value="${c:l('commons.label.requiereRespuesta')}"
+								sclass="texto_normal" />
+						</listcell>
+						<listcell>
+							<checkbox id="chkRequiereRta" width="90%" />
+						</listcell>
+						<listcell>
+							<label
+								value="${c:l('commons.label.anulados')}" />
+						</listcell>
+						<listcell>
+							<checkbox id="chkAnulados" width="90%" />
+						</listcell>
+						<listcell
+							style="text-align: center; margin: auto;">
+							<button id="btnBuscar"
+								onClick="@command('buscarRadicados')"
+								label="${c:l('commons.button.buscar')}" />
+						</listcell>
+						<listcell
+							style="text-align: center; margin: auto;">
+							<button id="btnExportarCSV"
+								onClick="@command('exportarCsv')"
+								label="${c:l('commons.button.exportarCsv')}" />
+						</listcell>
+					</listitem>
+				</listbox>
+			</north>
+			<center border="none">
+				<vlayout hflex="1" vflex="1">
+					<grid id="grdRadicados" sizedByContent="true"
+						hflex="1" vflex="1" onAfterRender="@command('renderizar')"
+						model="@load(vm.radicados)"
+						rowRenderer="co.com.grupoasd.documental.presentacion.controller.correspondencia.ConsultaRadicadoRenderer"
+						emptyMessage="${c:l('commons.label.consultaSinResultados')}"
+						autopaging="true">
+						<columns sizable="true">
+							<column hflex="min"
+								label="${c:l('correspondencia.commons.label.idRadicado')}"
+								visible="false" />
+							<column hflex="min"
+								label="${c:l('correspondencia.commons.label.radicado')}"
+								sort="auto(radicado)" />
+							<column hflex="min"
+								label="${c:l('correspondencia.commons.label.fechaRadicacion')}"
+								sort="auto(fechaRadicado)" />
+							<column hflex="min"
+								label="${c:l('correspondencia.commons.label.tipoRadicado')}"
+								sort="auto(nombreTipoRadicacion)" />
+							<column hflex="min"
+								label="${c:l('commons.label.remitente')}"
+								sort="auto(remitente)" />
+							<column hflex="min"
+								label="${c:l('commons.label.estado')}"
+								sort="auto(nombreEstado)" />
+							<column hflex="min"
+								label="${c:l('commons.label.areaProceso')}"
+								sort="auto(nombreArea)" />
+							<column hflex="min"
+								label="${c:l('commons.label.serie')}" sort="auto(nombreSerie)" />
+							<column hflex="min"
+								label="${c:l('commons.label.subserie')}"
+								sort="auto(nombreSubserie)" />
+							<column hflex="min"
+								label="${c:l('correspondencia.label.radicacion.cantidadFolios')}"
+								sort="auto(cantidadFolios)" />
+							<column hflex="min"
+								label="${c:l('commons.label.anexos')}" sort="auto(anexos)" />
+							<column hflex="min"
+								label="${c:l('correspondencia.commons.label.radicadoAsociado')}"
+								sort="auto(radicadoAsociado)" />
+							<column hflex="min"
+								label="${c:l('correspondencia.commons.label.radicadoRemitente')}"
+								sort="auto(radicadoExterno)" />
+							<column hflex="min"
+								label="${c:l('commons.label.canal')}" sort="auto(nombreCanal)" />
+							<column hflex="min"
+								label="${c:l('commons.label.asunto')}" sort="auto(asunto)" />
+							<column hflex="min"
+								label="${c:l('commons.label.asignadoA')}"
+								sort="auto(asignados)" />
+							<column hflex="min"
+								label="${c:l('commons.label.fechaVencimiento')}"
+								sort="auto(fechaVencimiento)" />
+							<column hflex="min"
+								label="${c:l('commons.label.destinatario')}"
+								sort="auto(destinatarios)" />
+							<column width="100px"
+								label="${c:l('commons.label.opciones')}" />
+						</columns>
+					</grid>
+					<paging id="pageResult" autohide="false"
+						detailed="true" pageSize="50" onPaging="@command('paginar')">
+					</paging>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>
